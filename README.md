@@ -8,5 +8,5 @@ PT6311
 PT6315
 ![test](images/pt6315.jpg)
 
-Another PT6315 and there comes some problem with addressing, when trying to use rightmost digit, it shifts to left, needs to be fixed, happens among types with images on the left
+Another PT6315 and there comes some problem with addressing, when trying to use rightmost digit, it shifts to left, needs to be fixed, happens among types with images on the left. Also you can notice missing dot in the middle, it is not 14 segment display!
 ![test](images/pt6315v2.jpg)
