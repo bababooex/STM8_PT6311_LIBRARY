@@ -7,3 +7,6 @@ PT6311
 
 PT6315
 ![test](images/pt6315.jpg)
+
+Another PT6315 and there comes some problem with addressing, when trying to use rightmost digit, it shifts to left, needs to be fixed, happens among types with images on the left
+![test](images/pt6315v2.jpg)
