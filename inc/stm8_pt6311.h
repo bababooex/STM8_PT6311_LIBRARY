@@ -14,22 +14,22 @@
  */
 
 /*
-  driver for PT6311/PT6315 or equivalents
+  14 segment driver for PT6311/PT6315 or equivalents
   V1.0
 	
-	Library needs external _delay_us() function (like in "delay.h" library). DIgit positions start from 1!
+  Library needs external _delay_us() function (like in "delay.h" library). Digit positions start from 1!
  
   How to use this?
 	1. Set your chip type and verify your digits correctly - try to init display via pt6311_init(DIG_COUNT);
 		And then test, correct digit mapping is when digits start from left not missing any digit or full digits
-		with this function: pt6311_test_digit_positions(DIG_COUNT, 400); this will turn on every segment
-	2.  Because every manufacturer makes this different, you need to mape each segment yourself!
+		with this function: pt6311_test_digit_positions(DIG_COUNT, 400); this will turn on every segment of each digit
+	2.  Because every manufacturer makes this different, you need to map each segment yourself!
 			Use this function for that: pt6311_test_segments(1 for example, 400) and observe each, start from 0 and map each segment to this mapping for 14 segments
  
 
    Typical 14 segment layout
 	 
-			 +--- A ---+
+	   +--- A ---+
 
        |\   |   /|
        F  H I J  B
@@ -70,7 +70,7 @@
 #define PSEG_K   17
 #define PSEG_L   13
 #define PSEG_M   12
-#define PSEG_DP   2//dot point
+#define PSEG_DP   2
 
 //PRIVATE SECTION
 //macros for toggle
@@ -168,9 +168,9 @@ void pt6311_write_string(const char *str); //write string from left to right
 void pt6311_write_int(uint8_t digit_pos,int value); //write int (good for 4 digits max)
 void pt6311_clear_display(void);//clear whole display
 //helpers/testers
-void pt6311_test_digit_positions(uint8_t num_digits, uint16_t delay_per_digit_ms);
-void pt6311_test_segments(uint8_t digit_pos, uint16_t delay_per_segment_ms);
+void pt6311_test_digit_positions(uint8_t num_digits, uint16_t delay_per_digit_ms); //test position of each digit
+void pt6311_test_segments(uint8_t digit_pos, uint16_t delay_per_segment_ms); //test segments in chosen digit
 //others important
-void pt6311_write_digit(uint8_t digit_pos, uint32_t segments);
-void pt6311_setup_io(void);
+void pt6311_write_digit(uint8_t digit_pos, uint32_t segments); //write digit via correct SPI LIKE sequence
+void pt6311_setup_io(void); //setup pins as push_pull out
 #endif /*STM8_PT6311_H_*/
