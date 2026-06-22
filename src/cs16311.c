@@ -1,4 +1,4 @@
-#include "pt6311.h"
+#include "cs16311.h"
 
 uint8_t cs16311_num_digits;
 cs16311_brightness_t set_brightness = CS16311_BRIGHTNESS;
