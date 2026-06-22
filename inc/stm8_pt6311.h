@@ -8,7 +8,7 @@
 /*
  * stm8_pt6311(pt6315).h
  *
- *  Created on: 28. 6. 2020
+ *  Created on: 22. 6. 2026
  *      Author: Adam Fucik
  *  
  */
@@ -25,7 +25,7 @@
 		with this function: pt6311_test_digit_positions(DIG_COUNT, 400); this will turn on every segment of each digit
 	2.  Because every manufacturer makes this different, you need to map each segment yourself!
 			Use this function for that: pt6311_test_segments(1 for example, 400) and observe each, start from 0 and map each segment to this mapping for 14 segments
- 
+ 			Two shifted + places to right will blink so you can count ok
 
    Typical 14 segment layout
 	 
