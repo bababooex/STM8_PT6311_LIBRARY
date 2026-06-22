@@ -1,6 +1,6 @@
 #ifndef CS6311_H 
 #define CS6311_H
-
+//display specific library for VR22BX-V3 VFD board found in some old sat tuners
 #include "stm8s.h"
 #include "stm8s_delay.h"
 //define your pinout
