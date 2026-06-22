@@ -261,15 +261,13 @@ void pt6311_write_char_dot(uint8_t digit_pos, char chr, bool dot) {
     pt6311_write_digit(digit_pos, physical);
 }
 
-void pt6311_write_string(const char *str)
+void pt6311_write_string(uint8_t digit_pos,const char *str)
 {
-    uint8_t i = 1;
-
-    while (*str && i < pt6311_num_digits)
+    while (*str && digit_pos < pt6311_num_digits)
     {
-        pt6311_write_char(i, *str);
+        pt6311_write_char(digit_pos, *str);
         str++;
-        i++;
+        digit_pos++;
     }
 }
 
