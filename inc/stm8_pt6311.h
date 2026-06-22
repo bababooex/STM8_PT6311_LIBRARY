@@ -15,7 +15,7 @@
 
 /*
   14 segment driver for PT6311/PT6315 or equivalents
-  V1.0
+  V1.0.1
 	
   Library needs external _delay_us() function (like in "delay.h" library). Digit positions start from 1!
  
@@ -164,7 +164,7 @@ void pt6311_set_brightness(pt6311_brightness_t brightness); //set brightness
 void pt6311_set_display_state(pt6311_display_state_t state); //set state
 void pt6311_write_char(uint8_t digit_pos, char chr); //write char to specific position
 void pt6311_write_char_dot(uint8_t digit_pos, char chr, bool dot) ;
-void pt6311_write_string(const char *str); //write string from left to right
+void pt6311_write_string(uint8_t digit_pos, const char *str); //write string from left to right
 void pt6311_write_int(uint8_t digit_pos,int value); //write int (good for 4 digits max)
 void pt6311_clear_display(void);//clear whole display
 //helpers/testers
