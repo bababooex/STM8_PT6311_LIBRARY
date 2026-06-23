@@ -251,6 +251,11 @@ void pt6311_write_char(uint8_t digit_pos, char chr)
     pt6311_write_digit(digit_pos, physical);
 }
 
+void pt6311_clock_format(uint8_t digit_pos, uint8_t value)
+{
+    pt6311_write_char(digit_pos,     (value / 10) + '0');
+    pt6311_write_char(digit_pos + 1, (value % 10) + '0');
+}
 void pt6311_write_char_dot(uint8_t digit_pos, char chr, bool dot) {
     uint32_t physical;
 		uint32_t logical = pt6311_font(chr);
