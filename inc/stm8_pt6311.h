@@ -55,7 +55,7 @@
 #define PT6311_CLK_PIN    GPIO_PIN_6
 #define PT6311_STB_PORT   GPIOA
 #define PT6311_STB_PIN    GPIO_PIN_1
-//set via guide - count from 0, meaning 0 to 23 bits, but this is made for 14 segments
+//set via guide - count from 0, meaning 0 to 23 bits, but this is made for 14 segments - that doesnt mean that zero segment is equal to 0 bit, it can be shifted by manufacturer
 #define PSEG_A   4
 #define PSEG_B   5
 #define PSEG_C   16
