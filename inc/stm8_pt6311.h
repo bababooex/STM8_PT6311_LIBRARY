@@ -4,7 +4,8 @@
 #include "stm8s_delay.h"
 #include "stm8s.h"
 #include <stdbool.h>
-
+#include <stdio.h>
+#include <string.h>
 /*
  * stm8_pt6311(pt6315).h
  *
@@ -14,32 +15,28 @@
  */
 
 /*
-  14 segment driver for PT6311/PT6315 or equivalents
-  V1.1.1
+  driver for PT6311/PT6315 or equivalents
+  V1.1.2
 	
   Library needs external _delay_us() function (like in "delay.h" library). Digit positions start from 1!
  
   How to use this?
 	1. Set your chip type and verify your digits correctly - try to init display via pt6311_init(DIG_COUNT);
 		And then test, correct digit mapping is when digits start from left not missing any digit or full digits
-		with this function: pt6311_test_digit_positions(DIG_COUNT, 400); this will turn on every segment of each digit
-	2.  Because every manufacturer makes this different, you need to map each segment yourself!
-			Use this function for that: pt6311_test_segments(1 for example, 400) and observe each, start from 0 and map each segment to this mapping for 14 segments
- 			Two shifted + places to right will blink so you can count ok
+		with this function: pt6311_test_digit_positions(DIG_COUNT, 400); this will turn on every segment
+	2.  Because every manufacturer makes this different, you need to mape each segment yourself!
+		Use this function for that: pt6311_test_segments(1 for example, 400) and observe each, start from 0 and map each segment to this mapping for 14 segments
+ 
 
-   Typical 14 segment layout
+   Typical 14 segment layout - library handles colon or dot point as dot point, not both at once
 	 
 	   +--- A ---+
-
        |\   |   /|
-       F  H I J  B
-
+       F  H I J  B	  . DP
        |   \|/   |
        +-G1-+-G2-+
-
        |   /|\   |
-       E  K L M  C
-
+       E  K L M  C	  . DP
        |/   |   \/
        +--- D ---+    . DP
 */
@@ -49,13 +46,13 @@
 #define PT6315
 
 // define your own pinout.
-#define PT6311_DIN_PORT   GPIOD
-#define PT6311_DIN_PIN    GPIO_PIN_4
-#define PT6311_CLK_PORT   GPIOD
-#define PT6311_CLK_PIN    GPIO_PIN_6
-#define PT6311_STB_PORT   GPIOA
-#define PT6311_STB_PIN    GPIO_PIN_1
-//set via guide - count from 0, meaning 0 to 23 bits, but this is made for 14 segments - that doesnt mean that zero segment is equal to 0 bit, it can be shifted by manufacturer
+#define PT6311_DIN_PORT   GPIOC
+#define PT6311_DIN_PIN    GPIO_PIN_5
+#define PT6311_CLK_PORT   GPIOC
+#define PT6311_CLK_PIN    GPIO_PIN_4
+#define PT6311_STB_PORT   GPIOC
+#define PT6311_STB_PIN    GPIO_PIN_3
+//set via guide - count from 0, meaning 0 to 23 bits, but this is made for 14 segments
 #define PSEG_A   4
 #define PSEG_B   5
 #define PSEG_C   16
@@ -70,7 +67,7 @@
 #define PSEG_K   17
 #define PSEG_L   13
 #define PSEG_M   12
-#define PSEG_DP   2
+#define PSEG_DP   3 //or colon depending in user choice, I will not add special other segment, there are other variants of displays
 
 //PRIVATE SECTION
 //macros for toggle
@@ -81,7 +78,7 @@
 #define PT6311_STB_HIGH()   GPIO_WriteHigh(PT6311_STB_PORT, PT6311_STB_PIN)
 #define PT6311_STB_LOW()    GPIO_WriteLow(PT6311_STB_PORT, PT6311_STB_PIN)
 //defaults
-#define PT6311_BRIGHTNESS PT6311_BRIGHTNESS_4
+#define PT6311_BRIGHTNESS PT6311_BRIGHTNESS_8
 #define PT6311_STATE PT6311_DISPLAY_ON
 //this is never correct, you must correct it
 #define SEG_A (1u << 0)
@@ -163,15 +160,15 @@ void pt6311_init(uint8_t num_digits); //init display based on digits
 void pt6311_set_brightness(pt6311_brightness_t brightness); //set brightness
 void pt6311_set_display_state(pt6311_display_state_t state); //set state
 void pt6311_write_char(uint8_t digit_pos, char chr); //write char to specific position
-void pt6311_write_char_dot(uint8_t digit_pos, char chr, bool dot) ; //write char with dot point
-void pt6311_clock_format(uint8_t digit_pos, uint8_t value);//write clock specific 2 digit format
-void pt6311_write_string(uint8_t digit_pos, const char *str); //write string from left to right
+void pt6311_write_char_dot(uint8_t digit_pos, char chr, bool dot) ;//write char with dot point
+void pt6311_clock_format(uint8_t digit_pos, uint8_t value,bool colon);//write clock specific 2 digit format
+void pt6311_write_string(uint8_t digit_pos,const char *str); //write string from left to right
 void pt6311_write_int(uint8_t digit_pos,int value); //write int (good for 4 digits max)
 void pt6311_clear_display(void);//clear whole display
 //helpers/testers
-void pt6311_test_digit_positions(uint8_t num_digits, uint16_t delay_per_digit_ms); //test position of each digit
-void pt6311_test_segments(uint8_t digit_pos, uint16_t delay_per_segment_ms); //test segments in chosen digit
+void pt6311_test_digit_positions(uint8_t num_digits, uint16_t delay_per_digit_ms);
+void pt6311_test_segments(uint8_t digit_pos, uint16_t delay_per_segment_ms);
 //others important
-void pt6311_write_digit(uint8_t digit_pos, uint32_t segments); //write digit via correct SPI LIKE sequence
-void pt6311_setup_io(void); //setup pins as push_pull out
+void pt6311_write_digit(uint8_t digit_pos, uint32_t segments);
+void pt6311_setup_io(void);
 #endif /*STM8_PT6311_H_*/
