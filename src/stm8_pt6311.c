@@ -251,11 +251,6 @@ void pt6311_write_char(uint8_t digit_pos, char chr)
     pt6311_write_digit(digit_pos, physical);
 }
 
-void pt6311_clock_format(uint8_t digit_pos, uint8_t value)
-{
-    pt6311_write_char(digit_pos,     (value / 10) + '0');
-    pt6311_write_char(digit_pos + 1, (value % 10) + '0');
-}
 void pt6311_write_char_dot(uint8_t digit_pos, char chr, bool dot) {
     uint32_t physical;
 		uint32_t logical = pt6311_font(chr);
@@ -275,6 +270,31 @@ void pt6311_write_string(uint8_t digit_pos,const char *str)
         digit_pos++;
     }
 }
+void pt6311_clock_format(uint8_t digit_pos, uint8_t value,bool colon)
+{
+    pt6311_write_char_dot(digit_pos,(value / 10) + '0',colon);
+		
+    pt6311_write_char_dot(digit_pos + 1,(value % 10) + '0',colon);
+}
+void pt6311_scroll_string(uint8_t digit_pos,const char *str) {
+    uint8_t i,idx,len;
+		uint8_t scroll_pos = 0; 
+    len = strlen(str);
+    
+    for (i = 0; i < pt6311_num_digits; i++) {
+        idx = scroll_pos + i;
+        if (idx < len) {
+            pt6311_write_char(i, str[idx]);
+        } else {
+            pt6311_write_char(i, ' ');
+        }
+    }
+    scroll_pos++;
+    if (scroll_pos > len) {
+        scroll_pos = 0;
+    }
+}
+
 
 void pt6311_write_int(uint8_t digit_pos,int value)
 {
