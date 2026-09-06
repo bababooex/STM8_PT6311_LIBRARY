@@ -163,7 +163,7 @@ void pt6311_init(uint8_t num_digits)
 	  uint8_t i,cmd1;
     if (num_digits < PT6311_MIN_DIGITS) num_digits = PT6311_MIN_DIGITS;
     if (num_digits > PT6311_MAX_DIGITS) num_digits = PT6311_MAX_DIGITS;
-    pt6311_num_digits = num_digits+1;//correct num digits error
+    pt6311_num_digits = num_digits;
     pt6311_setup_io();
 
     delay_ms(50);
@@ -234,7 +234,7 @@ void pt6311_write_digit(uint8_t logical_digit, uint32_t segments)
 {
     uint8_t physical_pos;
 
-		physical_pos = pt6311_num_digits - logical_digit;
+		physical_pos = pt6311_num_digits -1- logical_digit;
 
     pt6311_start();
     pt6311_shift_out(PT6311_CMD3 | (physical_pos * 3u));
